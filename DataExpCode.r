@@ -57,4 +57,30 @@ sd_values <- sapply(numerical_columns, function(x) sd(x, na.rm = TRUE))
 sd_values
 
 
+# Task C
 
+# Min-Max Normalization
+min_max <- function(x) {
+  (x - min(x, na.rm = TRUE)) / (max(x, na.rm = TRUE) - min(x, na.rm = TRUE))
+}
+
+normalized_data_min_max <- sapply(numerical_columns, min_max)
+normalized_data_min_max
+
+# Z-score Standardization
+z_score <- function(x) {
+  (x - mean(x, na.rm = TRUE)) / sd(x, na.rm = TRUE)
+}
+
+standardized_data_z_score <- sapply(numerical_columns, z_score)
+standardized_data_z_score
+
+# Robust Scalar
+robust_scalar <- function(x) {
+  (x - median(x, na.rm = TRUE)) / IQR(x, na.rm = TRUE)
+}
+
+robust_scaled_data <- sapply(numerical_columns, robust_scalar)
+robust_scaled_data
+
+# Task D
