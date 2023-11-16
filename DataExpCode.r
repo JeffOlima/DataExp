@@ -1,6 +1,7 @@
 
 library(ggplot2)
 library(dplyr)
+library(tidyr)
 
 # Load the CSV file into R
 dataframe <- read.csv("./CriminalDataset.csv")
@@ -84,3 +85,48 @@ robust_scaled_data <- sapply(numerical_columns, robust_scalar)
 robust_scaled_data
 
 # Task D
+
+# Filter data for a specific station and offense
+filtered_data <- subset(dataframe, `Garda.Station` == "35301 Abbeyfeale, Limerick Division" & `Type.of.Offence` == "Attempts/threats to murder, assaults, harassments and related offences")
+
+# Line plot
+ggplot(filtered_data, aes(x = Year, y = VALUE, group = 1)) +
+  geom_line(color = "blue") +
+  geom_point(color = "blue", size = 2) +
+  labs(title = "Trend of Assaults Over Years",
+       x = "Year", y = "Number of Occurances") +
+  theme_minimal()
+
+# Scatter plot
+ggplot(filtered_data, aes(x = Year, y = VALUE)) +
+  geom_point(color = "red", size = 3) +
+  labs(title = "Scatter Plot of Assaults Over Years",
+       x = "Year", y = "Number of Assaults") +
+  theme_minimal()
+
+# Heatmap plot
+
+# Pivot the data to wide format
+heatmap_data <- filtered_data %>%
+  select(Year, `Type.of.Offence`, VALUE) %>%
+  spread(key = `Type.of.Offence`, value = VALUE)
+
+ggplot(data = heatmap_data, aes(x = `Attempts/threats to murder, assaults, harassments and related offences`, y = Year, fill = as.numeric(as.matrix(heatmap_data[, -1])))) +
+  geom_tile() +
+  scale_fill_gradient(low = "blue", high = "red") +
+  labs(title = "Heatmap of Assaults Over Years",
+       x = "Type of Offence", y = "Year")
+
+# Task E
+
+# Task F 
+
+# Create dummy variables using model.matrix
+dummy_variables <- model.matrix(~ `Type.of.Offence` - 1, data = dataframe)
+
+# Combine the dummy variables with the dataset
+dataframe <- cbind(dataframe, dummy_variables)
+
+# View column names
+names(dataframe)
+
