@@ -119,6 +119,20 @@ ggplot(data = heatmap_data, aes(x = `Attempts/threats to murder, assaults, haras
 
 # Task E
 
+# Filter the data for "Theft and related offences" in Dublin
+filtered_data <- subset(dataframe, Type.of.Offence == "Theft and related offences" & grepl("dublin", tolower(Garda.Station)))
+
+# Aggregate occurrences by year
+aggregated_data <- aggregate(VALUE ~ Year, data = filtered_data, sum)
+
+# Create a line plot
+ggplot(aggregated_data, aes(x = Year, y = VALUE)) +
+  geom_line() +
+  labs(title = "Total Occurrences of Theft and Related Offences in Dublin",
+       x = "Year",
+       y = "Total Occurrences") +
+  theme_minimal()
+
 # Task F 
 
 # Create dummy variables using model.matrix
